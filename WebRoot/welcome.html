@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="ico/favicon.ico">
+
+<title>百度网盘搜索</title>
+
+<!-- Bootstrap core CSS -->
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<div class="navbar navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">网盘搜索</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="welcome.html">百度</a></li>
+					<li><a href="index.html">谷歌</a></li>
+					<li><a target="_blank" href="baiqiang.pdf">关于</a></li>
+				</ul>
+			</div>
+			<!-- /.nav-collapse -->
+		</div>
+		<!-- /.container -->
+	</div>
+	<!-- /.navbar -->
+
+	<div class="container">
+
+		<div class="row row-offcanvas row-offcanvas-right">
+
+			<div class="col-xs-14 col-sm-10">
+				<p class="pull-right visible-xs"></p>
+				<div class="jumbotron" style="margin-top: 50px;">
+					<div class="input-group">
+						<input type="search" id="text" name="q" class="form-control"
+							autocomplete="on" value="" placeholder="搜索"> <input
+							type="hidden" id="page" value="1" />
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default" id="search">百度网盘</button>
+						</div>
+						<!-- /btn-group -->
+					</div>
+					<!-- /input-group -->
+					<!-- <form action="#">
+						<input type="search" name="q" class="form-control"
+							autocomplete="on" lang="zh-CN" x-webkit-speech="" value=""
+							placeholder="搜索"> <select class="form-control">
+							<option>百度网盘</option>
+							<option>华为网盘</option>
+						</select>
+					</form> -->
+				</div>
+				<div id="list" class="list">
+					<div id="result"></div>
+					<div id="navi"></div>
+					<div id="info"></div>
+				</div>
+			</div>
+			<!--/span-->
+			<hr />
+		</div>
+		<footer style="text-align: center;">
+			<p>&copy; 白强 2014.All rights reserved</p>
+		</footer>
+
+	</div>
+	<!--/.container-->
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="http://lib.sinaapp.com/js/jquery/1.8/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#search").click(function() {
+				$('#result').html('');
+				search();
+			});
+			$("#navi").click(function() {
+				var page = parseInt($("#page").val());
+				$("#page").val(++page);
+				search();
+			});
+			$("#text").keydown(function() {
+				if (event.keyCode == "13") {//keyCode=13是回车键
+					$('#search').click();
+				}
+			});
+		});
+		function urldecode(data) {
+			return decodeURIComponent(data);
+		}
+
+		function show(id) {
+			console.log(id);
+			window.open(id, "_blank");
+		}
+		function search() {
+			$
+					.ajax({
+						url : "searchBaidu?q=" + $('#text').val() + "&page="
+								+ $('#page').val(),
+						type : "get",
+						dataType : "json",
+						beforeSend : function() {
+							$('#list').css('display', 'block');
+							$('#info').html('正在请求数据。。');
+						},
+						success : function(data, status) {
+							$('#info').html('');
+							console.log(data);
+							$("#list").css('display', 'block');
+							if (data.total / 10 != 1) {
+								$('#navi')
+										.html(
+												'<a class="btn btn-info btn-block">载入更多</a>');
+							}
+							$
+									.each(
+											data,
+											function(i, item) {
+												console
+														.log(urldecode(item.title)
+																+ ":"
+																+ urldecode(item.unescapedUrl));
+												$(
+														'<div style="col-xs-12">'
+																+ '<h3><a class="btn btn-default" target="_blank" onclick="show(\''
+																+ item.url
+																+ '\');"> '
+																+ item.title
+																+ '</a></h3>'
+																+ '<a target="_blank"<h4>'
+																+ urldecode(item.url)
+																+ ' </h4></a><p>'
+																+ '摘要:'
+																+ item.content
+																+ '</p></div>')
+														.appendTo('#result');
+											});
+						},
+						error : function() {
+							console.log("error");
+							$('#list').css('display', 'none');
+							$('#result').html('failed');
+						}
+					});
+		}
+	</script>
+</body>
+</html>

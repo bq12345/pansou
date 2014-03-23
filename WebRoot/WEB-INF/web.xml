@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    
+    <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+  <servlet>
+    <description>网盘搜索</description>
+    <display-name>网盘搜索</display-name>
+    
+    <servlet-name>SearchServlet</servlet-name>
+    <servlet-class>org.bq.search.SearchServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SearchServlet</servlet-name>
+    <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description>网盘搜索</description>
+    <display-name>网盘搜索</display-name>
+    
+    <servlet-name>SearchBaidu</servlet-name>
+    <servlet-class>org.bq.search.Searcher</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SearchBaidu</servlet-name>
+    <url-pattern>/searchBaidu</url-pattern>
+  </servlet-mapping>
+
+</web-app>
